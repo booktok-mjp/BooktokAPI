@@ -14,16 +14,31 @@ import java.util.List;
 public class BookController {
     @Autowired
     private BookService bookService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private JwtService jwtService;
 
     @GetMapping("/{bookId}")
-    public ResponseEntity<Book> getBookById(@PathVariable("bookId") Long bookId) {
-           Book book = bookService.findBookById(bookId);
+    public ResponseEntity<Book> getBookById(@RequestHeader("Authorization") String token, @PathVariable("bookId") Long bookId) {
+        Long authenticatedUserId = getAuthenticatedUserId(token);
 
-           if(book == null){
+        if(authenticatedUserId == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Book book = bookService.findBookById(bookId);
+        if(book == null){
                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-           }
+        }
+        return ResponseEntity.ok(book);
+    }
 
-           return ResponseEntity.ok(book);
+    private Long getAuthenticatedUserId(String token) {
+        String jwt = token.substring(7);
+        String auth0UserId = jwtService.getAuth0UserId(jwt);
+        System.out.println(auth0UserId);
+        return userService.findUserByAuth0UserId(auth0UserId);
     }
 
     @GetMapping("/all")
