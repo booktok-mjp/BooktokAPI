@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("api/bookcase")
 public class BookcaseController {
@@ -17,6 +19,9 @@ public class BookcaseController {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private BookcaseService bookcaseService;
 
     @GetMapping("/me")
     public ResponseEntity<Bookcase> getMyBookcase(@RequestHeader("Authorization") String token) {
@@ -28,9 +33,7 @@ public class BookcaseController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<Object> getBookcaseById(@RequestHeader("Authorization") String token, @PathVariable("userId") Long userId){
-        String jwt = token.substring(7);
-        String auth0UserId = jwtService.getAuth0UserId(jwt);
-        Long authenticatedUserId = userService.findUserByAuth0UserId(auth0UserId);
+        Long authenticatedUserId = getAuthenticatedUserId(token);
 
         if(authenticatedUserId == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -42,6 +45,47 @@ public class BookcaseController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @DeleteMapping("/book/{bookId}")
+    public ResponseEntity<Object> deleteBookFromBookcase(@RequestHeader("Authorization") String token, @PathVariable("bookId") Long bookId) {
+        Long authenticatedUserId = getAuthenticatedUserId(token);
+
+        if(authenticatedUserId == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Bookcase bookcase = userService.findUserBookcaseByUserId(authenticatedUserId);
+        if (bookcase != null) {
+           return ResponseEntity.ok(bookcaseService.deleteBookFromBookcaseById(bookcase.getId(), bookId));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/book/{bookId}")
+    public ResponseEntity<Bookcase> addBookToBookcase(@RequestHeader("Authorization") String token, @PathVariable("bookId") Long bookId) {
+        Long authenticatedUserId = getAuthenticatedUserId(token);
+
+        if (authenticatedUserId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Bookcase bookcase = userService.findUserBookcaseByUserId(authenticatedUserId);
+        if (bookcase != null) {
+            Optional<Bookcase> updatedBookcase = bookcaseService.addBookToBookcaseById(bookcase.getId(), bookId);
+            return updatedBookcase.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
+    public Long getAuthenticatedUserId(String token) {
+        String jwt = token.substring(7);
+        String auth0UserId = jwtService.getAuth0UserId(jwt);
+        System.out.println(auth0UserId);
+        return userService.findUserByAuth0UserId(auth0UserId);
     }
 }
 
