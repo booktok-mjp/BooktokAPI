@@ -3,6 +3,8 @@ package com.marlisajp.booktokapi.user;
 import com.marlisajp.booktokapi.bookcase.Bookcase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -20,6 +22,8 @@ public class UserService {
             User newUser = User.builder()
                     .auth0UserId(auth0UserId)
                     .bookcase(new Bookcase())
+                    .messages(new ArrayList<>())
+                    .threads(new ArrayList<>())
                     .build();
 
             newUser.getBookcase().setUser(newUser);
@@ -37,5 +41,9 @@ public class UserService {
         return userRepository.findByAuth0UserId(
                 auth0UserId
         ).map(User::getId).orElse(null);
+    }
+
+    public Optional<User> findUserById(Long userId) {
+        return userRepository.findById(userId);
     }
 }

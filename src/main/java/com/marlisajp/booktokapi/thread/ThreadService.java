@@ -1,6 +1,7 @@
 package com.marlisajp.booktokapi.thread;
 
 import com.marlisajp.booktokapi.message.Message;
+import com.marlisajp.booktokapi.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +22,18 @@ public class ThreadService {
         return threadRepository.findByUserId(userId);
     }
 
-    public Thread createThread(String title, String subject, String book) {
+    public Thread createThread(String title, String subject, String book, User user) {
         Thread thread = new Thread();
         thread.setTitle(title);
         thread.setSubject(subject);
         thread.setBook(book);
-        return threadRepository.save(thread);
+        thread.setUser(user);
+
+        Thread createdThread = threadRepository.save(thread);
+        // add to users threads
+        user.getThreads().add(createdThread);
+
+        return createdThread;
     }
 
     public Optional<Thread> getThreadById(Long threadId) {
