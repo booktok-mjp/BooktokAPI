@@ -1,5 +1,6 @@
 package com.marlisajp.booktokapi.thread;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.marlisajp.booktokapi.message.Message;
 import com.marlisajp.booktokapi.user.User;
 import jakarta.persistence.*;
@@ -22,6 +23,7 @@ public class Thread {
     private User user;
 
     @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Message> messages;
 
     public Long getId() {

@@ -22,9 +22,9 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Bookcase bookcase;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Thread> threads;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Message> messages;
 }

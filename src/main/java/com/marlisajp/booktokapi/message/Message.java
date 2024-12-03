@@ -1,5 +1,6 @@
 package com.marlisajp.booktokapi.message;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.marlisajp.booktokapi.thread.Thread;
 import com.marlisajp.booktokapi.user.User;
@@ -15,12 +16,11 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "thread_id", nullable = false)
-    @JsonIgnore
+    @JsonBackReference
     private Thread thread;
 
     public Long getId() {
