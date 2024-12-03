@@ -1,8 +1,12 @@
 package com.marlisajp.booktokapi.user;
 
 import com.marlisajp.booktokapi.bookcase.Bookcase;
+import com.marlisajp.booktokapi.message.Message;
+import com.marlisajp.booktokapi.thread.Thread;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "_user")
@@ -17,4 +21,10 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Bookcase bookcase;
+
+    @OneToMany
+    private List<Thread> threads;
+
+    @OneToMany
+    private List<Message> messages;
 }
