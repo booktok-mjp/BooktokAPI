@@ -1,5 +1,6 @@
 package com.marlisajp.booktokapi.bookcase;
 
+import com.marlisajp.booktokapi.auth.AuthUtil;
 import com.marlisajp.booktokapi.auth.JwtService;
 import com.marlisajp.booktokapi.user.User;
 import com.marlisajp.booktokapi.user.UserService;
@@ -23,6 +24,9 @@ public class BookcaseController {
     @Autowired
     private BookcaseService bookcaseService;
 
+    @Autowired
+    private AuthUtil authUtil;
+
     @GetMapping("/me")
     public ResponseEntity<Bookcase> getMyBookcase(@RequestHeader("Authorization") String token) {
         String jwt = token.substring(7);
@@ -33,7 +37,7 @@ public class BookcaseController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<Object> getBookcaseById(@RequestHeader("Authorization") String token, @PathVariable("userId") Long userId){
-        Long authenticatedUserId = getAuthenticatedUserId(token);
+        Long authenticatedUserId = authUtil.getAuthenticatedUserId(token);
 
         if(authenticatedUserId == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -49,7 +53,7 @@ public class BookcaseController {
 
     @DeleteMapping("/book/{bookId}")
     public ResponseEntity<Object> deleteBookFromBookcase(@RequestHeader("Authorization") String token, @PathVariable("bookId") Long bookId) {
-        Long authenticatedUserId = getAuthenticatedUserId(token);
+        Long authenticatedUserId = authUtil.getAuthenticatedUserId(token);
 
         if(authenticatedUserId == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -65,7 +69,7 @@ public class BookcaseController {
 
     @PostMapping("/book/{bookId}")
     public ResponseEntity<Bookcase> addBookToBookcase(@RequestHeader("Authorization") String token, @PathVariable("bookId") Long bookId) {
-        Long authenticatedUserId = getAuthenticatedUserId(token);
+        Long authenticatedUserId = authUtil.getAuthenticatedUserId(token);
 
         if (authenticatedUserId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -78,14 +82,6 @@ public class BookcaseController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-    }
-
-
-    public Long getAuthenticatedUserId(String token) {
-        String jwt = token.substring(7);
-        String auth0UserId = jwtService.getAuth0UserId(jwt);
-        System.out.println(auth0UserId);
-        return userService.findUserByAuth0UserId(auth0UserId);
     }
 }
 
