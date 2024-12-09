@@ -97,6 +97,12 @@ public class ThreadController {
         if(authenticatedUserId == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
+        Optional<User> optionalUser = userService.findUserById(authenticatedUserId);
+        if(optionalUser.isEmpty()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        User user = optionalUser.get();
         // find thread
         Optional<Thread> threadOptional = threadService.getThreadById(threadId);
 
@@ -107,7 +113,7 @@ public class ThreadController {
         Thread thread = threadOptional.get();
 
         // create and add message to thread
-        Message createdMessage = messageService.createMessage(message.getContent());
+        Message createdMessage = messageService.createMessage(message.getContent(), thread, user );
         Thread updatedThread = threadService.addMessageToThread(createdMessage, thread);
 
         // return updated thread
