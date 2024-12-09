@@ -1,5 +1,6 @@
 package com.marlisajp.booktokapi.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.marlisajp.booktokapi.bookcase.Bookcase;
 import com.marlisajp.booktokapi.message.Message;
 import com.marlisajp.booktokapi.thread.Thread;
@@ -23,8 +24,21 @@ public class User {
     private Bookcase bookcase;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Thread> threads;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Message> messages;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", auth0UserId='" + auth0UserId + '\'' +
+                ", bookcase=" + bookcase +
+                ", threads=" + threads +
+                ", messages=" + messages +
+                '}';
+    }
 }

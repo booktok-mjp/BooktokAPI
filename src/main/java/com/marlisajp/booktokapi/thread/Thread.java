@@ -1,14 +1,16 @@
 package com.marlisajp.booktokapi.thread;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.marlisajp.booktokapi.message.Message;
 import com.marlisajp.booktokapi.user.User;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.List;
 
-@Entity
-@Table
+@Setter @Getter
+@Entity @Table
+@NoArgsConstructor @AllArgsConstructor
+@Builder
 public class Thread {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,54 +25,17 @@ public class Thread {
     private User user;
 
     @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
-    @JsonManagedReference
     private List<Message> messages;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public List<Message> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
-    }
-
-    public String getBook() {
-        return book;
-    }
-
-    public void setBook(String book) {
-        this.book = book;
+    @Override
+    public String toString() {
+        return "Thread{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", subject='" + subject + '\'' +
+                ", book='" + book + '\'' +
+                ", user=" + user +
+                ", messages=" + messages +
+                '}';
     }
 }

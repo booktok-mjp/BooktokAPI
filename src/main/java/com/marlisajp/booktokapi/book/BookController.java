@@ -13,10 +13,13 @@ import java.util.List;
 @RestController
 @RequestMapping("api/books")
 public class BookController {
-    @Autowired
-    private BookService bookService;
-    @Autowired
-    private AuthUtil authUtil;
+    private final BookService bookService;
+    private final AuthUtil authUtil;
+
+    public BookController(BookService bookService, AuthUtil authUtil) {
+        this.bookService = bookService;
+        this.authUtil = authUtil;
+    }
 
     @GetMapping("/{bookId}")
     public ResponseEntity<Book> getBookById(@RequestHeader("Authorization") String token, @PathVariable("bookId") Long bookId) {

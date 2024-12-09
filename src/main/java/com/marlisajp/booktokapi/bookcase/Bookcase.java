@@ -29,6 +29,15 @@ public class Bookcase {
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
     private List<Book> books;
+
+    @Override
+    public String toString() {
+        return "Bookcase{" +
+                "id=" + id +
+                ", user=" + user +
+                ", books=" + books +
+                '}';
+    }
 }
 
 
