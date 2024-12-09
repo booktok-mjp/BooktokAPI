@@ -29,7 +29,12 @@ public class ThreadController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Thread>> getAllThreads() {
+    public ResponseEntity<List<Thread>> getAllThreads(@RequestHeader("Authorization") String token) {
+        Long authenticatedUserId = authUtil.getAuthenticatedUserId(token);
+
+        if(authenticatedUserId == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.ok(threadService.getAllThreads());
     }
 
@@ -63,6 +68,8 @@ public class ThreadController {
 
     @PostMapping
     public ResponseEntity<Thread> createThread(@RequestHeader("Authorization") String token, @RequestBody Thread thread) {
+        System.out.println("thread in controller");
+        System.out.println(thread.toString());
         Long authenticatedUserId = authUtil.getAuthenticatedUserId(token);
 
         if(authenticatedUserId == null){
@@ -77,6 +84,8 @@ public class ThreadController {
 
         User user = optionalUser.get();
         Thread createdThread = threadService.createThread(thread.getTitle(), thread.getSubject(), thread.getBook(), user);
+        System.out.println("created thread");
+        System.out.println(thread.toString());
         return ResponseEntity.ok(createdThread);
     }
 
