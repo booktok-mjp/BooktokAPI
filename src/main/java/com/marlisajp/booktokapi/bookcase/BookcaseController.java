@@ -15,17 +15,14 @@ import java.util.Optional;
 @RequestMapping("api/bookcase")
 public class BookcaseController {
 
-    private final UserService userService;
-    private final JwtService jwtService;
-    private final BookcaseService bookcaseService;
-    private final AuthUtil authUtil;
-
-    public BookcaseController(UserService userService, JwtService jwtService, BookcaseService bookcaseService, AuthUtil authUtil) {
-        this.userService = userService;
-        this.jwtService = jwtService;
-        this.bookcaseService = bookcaseService;
-        this.authUtil = authUtil;
-    }
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private JwtService jwtService;
+    @Autowired
+    private BookcaseService bookcaseService;
+    @Autowired
+    private AuthUtil authUtil;
 
     @GetMapping("/me")
     public ResponseEntity<Bookcase> getMyBookcase(@RequestHeader("Authorization") String token) {

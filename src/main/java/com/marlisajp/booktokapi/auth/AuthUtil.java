@@ -6,13 +6,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthUtil {
-    private final JwtService jwtService;
-    private final UserService userService;
-
-    public AuthUtil(JwtService jwtService, UserService userService) {
-        this.jwtService = jwtService;
-        this.userService = userService;
-    }
+    @Autowired
+    private JwtService jwtService;
+    @Autowired
+    private UserService userService;
 
     /**
      * Extracts the authenticated user's ID based on the JWT token.

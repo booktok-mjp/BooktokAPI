@@ -7,9 +7,12 @@ import lombok.*;
 
 import java.util.List;
 
-@Setter @Getter
-@Entity @Table
-@NoArgsConstructor @AllArgsConstructor
+@Entity
+@Table
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Thread {
     @Id

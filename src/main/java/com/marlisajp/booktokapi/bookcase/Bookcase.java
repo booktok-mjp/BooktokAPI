@@ -10,8 +10,11 @@ import java.util.List;
 
 @Entity
 @Table
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Bookcase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

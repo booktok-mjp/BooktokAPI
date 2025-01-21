@@ -6,9 +6,12 @@ import com.marlisajp.booktokapi.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter @Setter
-@Entity @Table
-@AllArgsConstructor @NoArgsConstructor
+@Entity
+@Table
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Message {
     @Id

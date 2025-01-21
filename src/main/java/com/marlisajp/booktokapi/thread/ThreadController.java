@@ -5,6 +5,7 @@ import com.marlisajp.booktokapi.message.Message;
 import com.marlisajp.booktokapi.message.MessageService;
 import com.marlisajp.booktokapi.user.User;
 import com.marlisajp.booktokapi.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,17 +17,15 @@ import java.util.Optional;
 @RequestMapping("api/threads")
 public class ThreadController {
 
-    private final ThreadService threadService;
-    private final MessageService messageService;
-    private final UserService userService;
-    private final AuthUtil authUtil;
+    @Autowired
+    private ThreadService threadService;
+    @Autowired
+    private MessageService messageService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private AuthUtil authUtil;
 
-    public ThreadController(ThreadService threadService,MessageService messageService, UserService userService, AuthUtil authUtil) {
-        this.messageService = messageService;
-        this.threadService = threadService;
-        this.userService = userService;
-        this.authUtil = authUtil;
-    }
 
     @GetMapping("/all")
     public ResponseEntity<List<Thread>> getAllThreads(@RequestHeader("Authorization") String token) {
