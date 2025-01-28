@@ -5,26 +5,14 @@ services:
     image: 'mpee/booktokapi'
     build:
       context: .
-    container_name: app
-    depends_on:
-      - db
+    container_name: booktok-api
+    restart: always
     environment:
-      - POSTGRES_USER=${SPRING_DATASOURCE_USERNAME}
-      - POSTGRES_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
-      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL_DB}
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
       - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=${AUTH0_ISSUER_URI}
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_AUDIENCES=${AUTH0_AUDIENCE}
     ports:
       - "8080:8080"
-
-  db:
-    image: postgres
-    container_name: db
-    environment:
-      - POSTGRES_USER=
-      - POSTGRES_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
-      - POSTGRES_DB=${DATABASE_NAME}
-    ports:
-      - "5432:5432"
