@@ -1,5 +1,6 @@
 package com.marlisajp.booktokapi.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Value("${AUTH0_ISSUER_URI}")
+    private String AUTH0_ISSUER_URI;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -32,7 +37,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        return JwtDecoders.fromIssuerLocation("https://dev-52nxnd34nkay1l4r.us.auth0.com/");
+        return JwtDecoders.fromIssuerLocation(AUTH0_ISSUER_URI);
     }
 
     @Bean
