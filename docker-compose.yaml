@@ -4,7 +4,6 @@ services:
     build:
       context: .
     container_name: booktok-api
-    restart: always
     environment:
       - SPRING_DATASOURCE_URL=${DATABASE_URL}
       - SPRING_DATASOURCE_USERNAME=${PGUSER}
