@@ -1,8 +1,0 @@
-services:
-  app:
-    image: 'mpee/booktokapi'
-    build:
-      context: .
-    container_name: booktok-api
-    ports:
-      - "8080:8080"
