@@ -17,7 +17,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Value("${AUTH0_ISSUER_URI}")
+    @Value("${AUTH0_ISSUER_URI:}")
     private String AUTH0_ISSUER_URI;
 
     @Bean

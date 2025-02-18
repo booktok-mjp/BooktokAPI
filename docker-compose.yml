@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=booktokdb
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      retries: 5
+
+  app:
+    image: 'mpee/booktokapi'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/booktokdb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - AUTH0_ISSUER_URI=${AUTH0_ISSUER_URI}
+      - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
+    ports:
+      - "8080:8080"
