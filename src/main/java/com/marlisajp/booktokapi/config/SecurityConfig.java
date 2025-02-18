@@ -44,6 +44,9 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:5173");
+        configuration.addAllowedOrigin("https://booktok-bootstrap-marlisapee-marlisas-projects.vercel.app/");
+        configuration.addAllowedOrigin("https://booktok-bootstrap.vercel.app/");
+        configuration.addAllowedOrigin("https://booktok-bootstrap-a0bc63rw4-marlisas-projects.vercel.app/");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
