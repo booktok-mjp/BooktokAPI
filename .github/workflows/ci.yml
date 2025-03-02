@@ -28,5 +28,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Build and run tests
-        run: mvn --batch-mode verify
+      - name: Run tests
+        env:
+          SPRING_PROFILES_ACTIVE: test
+        run: mvn test
+
+      - name: Build package (skip tests)
+        run: mvn package -DskipTests
